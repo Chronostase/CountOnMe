@@ -18,7 +18,7 @@ class Calculation {
     
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "/" && elements.last != "x"
     }
     
     var expressionHaveEnoughElement: Bool {
@@ -26,7 +26,7 @@ class Calculation {
     }
     
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "/" && elements.last != "x"
     }
     
     var expressionHaveResult: Bool {
@@ -50,10 +50,19 @@ class Calculation {
                 break
             }
             
-            let result: Int
+            var result = 0
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
+            case "x": result = left * right
+            case "/":
+                if right == 0 {
+                    let error = "= Can't divide by 0"
+                    numberStringArray = error
+                    return error
+                } else {
+                    result = left / right
+                }
             default: fatalError("Unknown operator !")
             }
             
@@ -64,7 +73,7 @@ class Calculation {
         guard let solution = operationToReduce.first else {
             return ""
         }
-        numberStringArray += " = \(solution)"
+        numberStringArray = " = \(solution)"
         return " = \(solution)"
     }
 }

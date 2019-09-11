@@ -51,9 +51,30 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        if calculation.canAddOperator {
+        if calculation.numberStringArray.count < 1 {
+            textView.text.append("-")
+            calculation.numberStringArray += ("-")
+        } else if calculation.canAddOperator {
             textView.text.append(" - ")
             calculation.numberStringArray += (" - ")
+        } else {
+            displayAlert("Un operateur est déja mis !")
+        }
+    }
+    
+    @IBAction func tappedDivisionButton(_ sender: Any) {
+        if calculation.canAddOperator {
+            textView.text.append(" / ")
+            calculation.numberStringArray += (" / ")
+        } else {
+            displayAlert("Un operateur est déja mis !")
+        }
+    }
+    
+    @IBAction func tappedMultiplicationButton(_ sender: Any) {
+        if calculation.canAddOperator {
+            textView.text.append(" x ")
+            calculation.numberStringArray += (" x ")
         } else {
             displayAlert("Un operateur est déja mis !")
         }
@@ -67,8 +88,6 @@ class ViewController: UIViewController {
         guard calculation.expressionHaveEnoughElement else {
             return displayAlert("Démarrez un nouveau calcul !")
         }
-        
-        //        textView.text.removeAll()
         
         textView.text = calculation.solveEquation()
     }
