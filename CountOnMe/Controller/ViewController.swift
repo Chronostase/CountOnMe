@@ -30,54 +30,21 @@ class ViewController: UIViewController {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
+        checkExpressionHaveResult()
         
-        print(calculation.numberStringArray)
-        if calculation.expressionHaveResult {
-            textView.text.removeAll()
-            calculation.numberStringArray.removeAll()
-        }
-        
-        calculation.numberStringArray += numberText
+        calculation.numberString += numberText
         textView.text.append(numberText)
     }
     
-    @IBAction func tappedAdditionButton(_ sender: UIButton) {
+    @IBAction func tappedOperand(_ sender: UIButton) {
+        
+        guard let operand = sender.currentTitle else {
+            return displayAlert("Can't receive information from sender.currenTitle")
+        }
         if calculation.canAddOperator {
-            textView.text.append(" + ")
-            calculation.numberStringArray += (" + ")
-        } else {
-            displayAlert("Un operateur est déja mis !")
+            addOperand(operand)
         }
-    }
-    
-    @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        if calculation.numberStringArray.count < 1 {
-            textView.text.append("-")
-            calculation.numberStringArray += ("-")
-        } else if calculation.canAddOperator {
-            textView.text.append(" - ")
-            calculation.numberStringArray += (" - ")
-        } else {
-            displayAlert("Un operateur est déja mis !")
-        }
-    }
-    
-    @IBAction func tappedDivisionButton(_ sender: Any) {
-        if calculation.canAddOperator {
-            textView.text.append(" / ")
-            calculation.numberStringArray += (" / ")
-        } else {
-            displayAlert("Un operateur est déja mis !")
-        }
-    }
-    
-    @IBAction func tappedMultiplicationButton(_ sender: Any) {
-        if calculation.canAddOperator {
-            textView.text.append(" x ")
-            calculation.numberStringArray += (" x ")
-        } else {
-            displayAlert("Un operateur est déja mis !")
-        }
+        
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
@@ -92,6 +59,37 @@ class ViewController: UIViewController {
         textView.text = calculation.solveEquation()
     }
     
+    private func addScripture(data: String ) {
+        textView.text.append(" \(data) ")
+        calculation.addToArray(data)
+    }
+    
+    private func checkExpressionHaveResult() {
+        if calculation.expressionHaveResult {
+            textView.text.removeAll()
+            calculation.numberString.removeAll()
+        }
+    }
+    
+    private func addOperand(_ operand: String) {
+        switch operand {
+        case "+": addScripture(data: operand)
+        case "-":
+            checkExpressionHaveResult()
+            if calculation.numberString.count < 1 {
+                textView.text.append("-")
+                calculation.numberString += ("-")
+            } else {
+                addScripture(data: operand)
+            }
+        case "x": addScripture(data: operand)
+        case "/": addScripture(data: operand)
+            
+        default : displayAlert("Un operateur est déjà mis !")
+            
+        }
+    }
+    
     //MARK: - Setup
     
     private func displayAlert(_ message: String) {
@@ -102,4 +100,3 @@ class ViewController: UIViewController {
     }
     
 }
-

@@ -10,10 +10,10 @@ import Foundation
 
 class Calculation {
     
-    var numberStringArray = String()
+    var numberString = ""
     
     var elements: [String] {
-        return numberStringArray.split(separator: " ").map { "\($0)" }
+        return numberString.split(separator: " ").map{ "\($0)" }
     }
     
     // Error check computed variables
@@ -30,7 +30,7 @@ class Calculation {
     }
     
     var expressionHaveResult: Bool {
-        return numberStringArray.firstIndex(of: "=") != nil
+        return numberString.firstIndex(of: "=") != nil
     }
     
     
@@ -58,7 +58,7 @@ class Calculation {
             case "/":
                 if right == 0 {
                     let error = "= Can't divide by 0"
-                    numberStringArray = error
+                    numberString = error
                     return error
                 } else {
                     result = left / right
@@ -71,9 +71,13 @@ class Calculation {
             operationToReduce.insert("\(result)", at: 0)
         }
         guard let solution = operationToReduce.first else {
-            return ""
+            return "We can't have solution"
         }
-        numberStringArray = " = \(solution)"
+        numberString = " = \(solution)"
         return " = \(solution)"
+    }
+    
+    func addToArray(_ data: String) {
+        numberString.append(data)
     }
 }
