@@ -10,7 +10,7 @@ import Foundation
 
 class Calculation {
     
-    var numberString = ""
+    var numberString = String()
     
     var elements: [String] {
         return numberString.split(separator: " ").map{ "\($0)" }
@@ -45,36 +45,46 @@ class Calculation {
             }
             
             let operand = operationToReduce[1]
-            
+
             guard let right = Int(operationToReduce[2]) else {
                 break
             }
             
             var result = 0
+            
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
             case "x": result = left * right
             case "/":
                 if right == 0 {
-                    let error = "= Can't divide by 0"
+                    sendNotification(name: "Can't divide by 0")
+                    let error = "= ERROR"
                     numberString = error
                     return error
                 } else {
                     result = left / right
                 }
-            default: fatalError("Unknown operator !")
+            default:
+                return "ERROR"
             }
             
             operationToReduce = Array(operationToReduce.dropFirst(3))
-            //            Laisse apparaitre à partir du 4ème élément
             operationToReduce.insert("\(result)", at: 0)
         }
         guard let solution = operationToReduce.first else {
-            return "We can't have solution"
+            return "Error"
         }
+        print("result: \(solution)")
+        
         numberString = " = \(solution)"
         return " = \(solution)"
+    }
+    
+    func sendNotification(name: String) {
+        let name = NSNotification.Name(name)
+        let notification = Notification(name: name)
+        NotificationCenter.default.post(notification)
     }
     
     func addToArray(_ data: String) {
